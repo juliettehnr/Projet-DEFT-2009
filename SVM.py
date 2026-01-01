@@ -4,28 +4,10 @@ from sklearn.svm import LinearSVC
 from sklearn.metrics import classification_report, accuracy_score
 
 #Chargement
-train_df = pd.read_csv("train_split.csv")
-test_df = pd.read_csv("test_split.csv")
-
-#Verification des doublons
-print("Verif des doublons : ")
-
-# Recherche de textes strictement identiques entre train et test
-# On transforme les colonnes en "sets" pour trouver l'intersection
-set_train = set(train_df["Discours"])
-set_test = set(test_df["Discours"])
-
-doublons = set_train.intersection(set_test)
-nb_doublons = len(doublons)
-
-if nb_doublons > 0:
-    print(f"{nb_doublons} textes identiques trouvés entre le train et le test !")
-    test_df = test_df[~test_df["Discours"].isin(doublons)]
-else:
-    print("Aucun texte commun entre le train et le test.")
+train_df = pd.read_csv("./Projet DEFT/train.csv")
+test_df = pd.read_csv("./Projet DEFT/test.csv")
 
 print(f"Taille finale - Train: {len(train_df)} | Test: {len(test_df)}\n")
-
 
 X_train, y_train = train_df["Discours"], train_df["Parti"]
 X_test, y_test = test_df["Discours"], test_df["Parti"]

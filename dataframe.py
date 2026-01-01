@@ -34,18 +34,22 @@ df = pd.DataFrame({
     "Parti": labels
 })
 
-# On limite à 3300 discours par classe (parce que la classe minoritaire avait 3347 discours contre plus de 11000 pour la classe majoritaire)
-# On mélange le dataframe et on fait en sorte qu'il soit reproductible
-
-max_per_class = 3300
+df = df.drop_duplicates(subset=["Discours"]) # On supprime les doublons
 
 df = (
     df.groupby("Parti", group_keys=False)
-      .apply(lambda x: x.sample(n=min(len(x), 3300), random_state=42))
-      .sample(frac=1, random_state=42)  # mélange global
+      .apply(lambda x: x.sample(n=min(len(x), 2700), random_state=42)) # On limite à 2700 discours par classe (parce que la classe minoritaire avait 3347 discours contre plus de 11000 pour la classe majoritaire)
+      .sample(frac=1, random_state=42)  # On mélange le dataframe et on fait en sorte qu'il soit reproductible
       .reset_index(drop=True)
 )
 
+# Vérification
+"""
+nb_doublons = df.duplicated(subset=["Discours"]).sum()
+print(f"Nombre de doublons (Discours) : {nb_doublons}")
+print("Taille totale :", len(df))
+print(df["Parti"].value_counts())
+"""
 
 # --- Split du corpus ---
 
@@ -56,34 +60,27 @@ df_train, df_test = train_test_split(
     random_state=42
 )
 
-X_train = df_train["Discours"]
-y_train = df_train["Parti"]
-
-X_test = df_test["Discours"]
-y_test = df_test["Parti"]
-
-# vérif
-
+# Vérification
+"""
 print("Taille totale :", len(df))
 print("Train :", len(df_train))
 print("Test :", len(df_test))
 
 print(df_train["Parti"].value_counts())
 print(df_test["Parti"].value_counts())
+"""
 
-# CSV d'entraînement
+# --- Création des fichiers CSV ---
 df_train.to_csv(
     "train.csv",
     index=False,
     encoding="utf-8"
 )
 
-# CSV de test
 df_test.to_csv(
     "test.csv",
     index=False,
     encoding="utf-8"
 )
-
 
 
