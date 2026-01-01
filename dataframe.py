@@ -71,5 +71,19 @@ print("Test :", len(df_test))
 print(df_train["Parti"].value_counts())
 print(df_test["Parti"].value_counts())
 
+# CSV d'entraînement
+df_train.to_csv(
+    "train.csv",
+    index=False,
+    encoding="utf-8"
+)
+
+# CSV de test
+df_test.to_csv(
+    "test.csv",
+    index=False,
+    encoding="utf-8"
+)
+
 
 
