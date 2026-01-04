@@ -38,7 +38,6 @@ df = df.drop_duplicates(subset=["Discours"]) # On supprime les doublons
 
 df = (
     df.groupby("Parti", group_keys=False)
-      .apply(lambda x: x.sample(n=min(len(x), 2700), random_state=42)) # On limite à 2700 discours par classe (parce que la classe minoritaire avait 3347 discours contre plus de 11000 pour la classe majoritaire)
       .sample(frac=1, random_state=42)  # On mélange le dataframe et on fait en sorte qu'il soit reproductible
       .reset_index(drop=True)
 )
